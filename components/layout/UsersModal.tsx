@@ -4,10 +4,6 @@ import Avatar from '../Avatar';
 import { Input } from '../ui/input';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { User } from '@prisma/client';
-import useFollow from '@/hooks/useFollow';
-import Button from '../Button';
-import useCurrentUser from '@/hooks/useCurrentUser';
 const UsersModal = () => {
  const router = useRouter();
   const { data: users = [] } = useUsers();
@@ -17,7 +13,7 @@ const UsersModal = () => {
   useEffect(() => {
     setFilteredUsers(users);
   }, [users]);
-  
+
   if (users.length === 0) {
     return null;
   }
