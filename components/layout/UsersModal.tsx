@@ -14,9 +14,14 @@ const UsersModal = () => {
   const [value, setValue] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
 
+  useEffect(() => {
+    setFilteredUsers(users);
+  }, [users]);
+  
   if (users.length === 0) {
     return null;
   }
+ 
 
   const searchUsers = () => {
     const filtered = users.filter((user: { username: string; }) => user.username.toLowerCase().includes(value.toLowerCase()));
@@ -24,10 +29,6 @@ const UsersModal = () => {
     const combinedFilteredUsers = Array.from(new Set([...filtered, ...filteredwithname]));
     setFilteredUsers(combinedFilteredUsers as never[]);
   };
-
-  useEffect(() => {
-    setFilteredUsers(users);
-  }, [users]);
 
   
 
