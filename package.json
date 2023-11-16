@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "postinstall": "prisma generate",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "npx tsc --noEmit"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.5",
