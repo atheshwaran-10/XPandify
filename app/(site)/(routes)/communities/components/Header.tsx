@@ -27,7 +27,7 @@ const Header = () => {
       user.name?.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredUsers(filtered);
-  }, [setFilteredUsers,communities]);
+  }, [setFilteredUsers,communities,value]);
 
 
   const searchUsers = () => {
