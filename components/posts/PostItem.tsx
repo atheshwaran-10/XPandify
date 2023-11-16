@@ -1,4 +1,5 @@
-import { useRouter } from 'next/router';
+"use client"
+import { useRouter } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from 'react-icons/ai';
 import { formatDistanceToNowStrict } from 'date-fns';

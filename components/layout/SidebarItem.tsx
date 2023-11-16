@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { IconType } from "react-icons";
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import useLoginModal from '@/hooks/useLoginModal';
 import useCurrentUser from '@/hooks/useCurrentUser';
@@ -64,7 +64,6 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ label, icon: Icon, href, auth
         <p className="text-xl">
           {label}
         </p>
-        {alert ? <BsDot className="text-sky-500 absolute -top-4 left-0" size={70} /> : null}
       </div>
     </div>
   );

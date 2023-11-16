@@ -1,3 +1,4 @@
+
 import { create } from 'zustand';
 
 interface EditModalStore {
@@ -8,8 +9,8 @@ interface EditModalStore {
 
 const useEditModal = create<EditModalStore>((set) => ({
   isOpen: false,
-  onOpen: () => set({ isOpen: true }),
-  onClose: () => set({ isOpen: false })
+  onOpen: () => {set({ isOpen: true })},
+  onClose: () => {set({ isOpen: false })}
 }));
 
 

@@ -1,5 +1,5 @@
+"use client"
 import useUsers from '@/hooks/useUsers';
-
 import Avatar from '../Avatar';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import useFollow from "@/hooks/useFollow";

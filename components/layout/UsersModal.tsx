@@ -3,16 +3,21 @@ import useUsers from '@/hooks/useUsers';
 import Avatar from '../Avatar';
 import { Input } from '../ui/input';
 import { useRouter } from 'next/navigation';
+import useFollow from '@/hooks/useFollow';
 import { useEffect, useState } from 'react';
+import useCurrentUser from '@/hooks/useCurrentUser';
+import { Button } from '../ui/button';
 const UsersModal = () => {
  const router = useRouter();
   const { data: users = [] } = useUsers();
+  const { data: currentUser } = useCurrentUser();
   const [value, setValue] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
+   const { isFollowing, toggleFollow ,loading } = useFollow(currentUser?.id);
 
   useEffect(() => {
     setFilteredUsers(users);
-  }, [users]);
+  }, [users,setFilteredUsers]);
 
   if (users.length === 0) {
     return null;
@@ -59,18 +64,28 @@ const UsersModal = () => {
             )
           }
           {filteredUsers.map((user: Record<string, any>) => (
-            <div key={user.id} className="flex flex-row gap-4 rounded-lg hover:cursor-pointer" onClick={()=>router.push(`users/${user.id}`)}>
+            <div key={user.id} className="flex flex-row gap-4 rounded-lg ">
               <Avatar userId={user.id} />
-              <div className="flex flex-col">
+              <div className="flex flex-col hover:cursor-pointer" onClick={()=>router.push(`users/${user.id}`)}>
                 <p className="font-semibold text-sm">{user.name}</p>
                 <p className="text-neutral-400 text-sm">@{user.username}</p>
               </div>
-               {/* <Button
-                onClick={toggleFollow} 
-                label={isFollowing ? 'Unfollow' : 'Follow'}
-                secondary={!isFollowing}
-                outline={isFollowing}
-              /> */}
+              {currentUser?.id === user.id ? (
+                <></>
+                ) : (
+                  <div className='ml-auto'>
+                    <Button
+                      disabled={loading}
+                      onClick={toggleFollow} 
+                      value={isFollowing ? 'Unfollow' : 'Follow'}
+                      variant={isFollowing ? "outline" : "default"}
+                      className={loading? " hover:cursor-wait" : "hover:cursor-pointer"}
+                    >
+                    {isFollowing ? <> Unfollow</> : <>Follow</>}
+                  </Button>
+                  </div>
+                  
+                )}
             </div>
           ))}
         </div>

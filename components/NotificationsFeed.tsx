@@ -1,3 +1,4 @@
+"use client"
 import { BsTwitter } from "react-icons/bs";
 
 import useNotifications from "@/hooks/useNotifications";

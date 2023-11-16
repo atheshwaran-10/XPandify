@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+"use client"
+import { useMemo, useState } from "react";
 import { BiCalendar } from "react-icons/bi";
 import { format } from "date-fns";
 
@@ -6,7 +7,7 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import useUser from "@/hooks/useUser";
 import useFollow from "@/hooks/useFollow";
 import useEditModal from "@/hooks/useEditModal";
-import Button from "../Button";
+import { Button } from "../ui/button";
 
 interface UserBioProps {
   userId: string;
@@ -18,7 +19,7 @@ const UserBio: React.FC<UserBioProps> = ({ userId }) => {
 
   const editModal = useEditModal();
 
-  const { isFollowing, toggleFollow } = useFollow(userId);
+  const { isFollowing, toggleFollow,loading } = useFollow(userId);
 
   const createdAt = useMemo(() => {
     if (!fetchedUser?.createdAt) {
@@ -28,19 +29,21 @@ const UserBio: React.FC<UserBioProps> = ({ userId }) => {
     return format(new Date(fetchedUser.createdAt), 'MMMM yyyy');
   }, [fetchedUser?.createdAt])
 
-
   return ( 
     <div className="border-b-[1px] border-neutral-800 pb-4">
       <div className="flex justify-end p-2">
         {currentUser?.id === userId ? (
-          <Button secondary label="Edit" onClick={editModal.onOpen} />
+          <Button variant="secondary" value="Edit" onClick={editModal.onOpen} >Edit Profile</Button>
         ) : (
           <Button
+            disabled={loading}
             onClick={toggleFollow} 
-            label={isFollowing ? 'Unfollow' : 'Follow'}
-            secondary={!isFollowing}
-            outline={isFollowing}
-          />
+            value={isFollowing ? 'Unfollow' : 'Follow'}
+            variant={isFollowing ? "outline" : "secondary"}
+            className={loading? " hover:cursor-wait" : "hover:cursor-pointer"}
+          >
+            {isFollowing ? <> Unfollow</> : <>Follow</>}
+            </Button>
         )}
       </div>
       <div className="mt-8 px-4">

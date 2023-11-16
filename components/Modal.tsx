@@ -38,7 +38,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit, title, body, a
     <>
       <div
         className="
-          justify-center 
+          justify-center
           items-center 
           flex 
           overflow-x-hidden 

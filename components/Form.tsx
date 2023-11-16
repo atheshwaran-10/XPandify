@@ -1,3 +1,4 @@
+"use client"
 import axios from 'axios';
 import { useCallback, useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -33,9 +34,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
       setIsLoading(true);
 
       const url = isComment ? `/api/comments?postId=${postId}` : '/api/posts';
-
       await axios.post(url, { body });
-
       toast.success('Tweet created');
       setBody('');
       mutatePosts();

@@ -1,7 +1,8 @@
+"use client"
 import { signOut } from 'next-auth/react';
 import { BiLogOut } from 'react-icons/bi';
 import { BsHouseFill, BsBellFill } from 'react-icons/bs';
-import { FaUser,FaSearch } from 'react-icons/fa';
+import { FaUser,FaSearch,FaUsers } from 'react-icons/fa';
 import useCurrentUser from '@/hooks/useCurrentUser';
 
 import SidebarItem from './SidebarItem';
@@ -17,10 +18,16 @@ const Sidebar = () => {
       label: 'Home',
       href: '/',
     },
-     {
+    {
       icon: FaSearch,
       label: 'Search',
       href: '/search',
+    },
+    {
+      icon: FaUsers,
+      label: 'Communities',
+      href: `/communities`,
+      auth: true,
     },
     {
       icon: BsBellFill,
