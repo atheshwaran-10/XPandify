@@ -3,17 +3,28 @@ import { NextResponse } from 'next/server';
 
 export  async function POST(req:Request) {
 
-  const { name, ownerId, profileImage } =await req.json();
+  const { name, ownerId, profileImage,desc } =await req.json();
 
   try {
     const createdCommunity = await prisma.community.create({
       data: {
         name: name,
+        description:desc,
         ownerId: ownerId,
         profileImage: profileImage,
         userIds:[ownerId]
       },
     });
+     const updatedUser = await prisma.user.update({
+        where: {
+          id: ownerId,
+        },
+        data: {
+          communityIds: {
+            push: createdCommunity.id, 
+          },
+        },
+      });
 
     return NextResponse.json(createdCommunity);
   } catch (error) {

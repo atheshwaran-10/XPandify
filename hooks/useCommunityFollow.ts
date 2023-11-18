@@ -7,7 +7,7 @@ import useCurrentUser from "./useCurrentUser";
 import useLoginModal from "./useLoginModal";
 import useUser from "./useUser";
 
-const useFollow = (userId: string) => {
+const useCommunityFollow = (userId: string,communityId:string) => {
   const { data: currentUser, mutate: mutateCurrentUser } = useCurrentUser();
   const { mutate: mutateFetchedUser } = useUser(userId);
   const [loading, setLoading] = useState(false);
@@ -15,8 +15,8 @@ const useFollow = (userId: string) => {
   const loginModal = useLoginModal();
 
   const isFollowing = useMemo(() => {
-    const list = currentUser?.followingIds || [];
-    return list.includes(userId);
+    const list = currentUser?.communityIds || [];
+    return list.includes(communityId);
   }, [currentUser, userId]);
 
   const toggleFollow = useCallback(async () => {
@@ -24,15 +24,16 @@ const useFollow = (userId: string) => {
     if (!currentUser) {
       return loginModal.onOpen();
     }
-
     try 
     {
       setLoading(true);
-
       if (isFollowing) {
-        await axios.delete('/api/follow', { data: { userId } });
+        await axios.delete('/api/join', {data:{userId ,communityId}});
+        console.log("UnFollowed");
+        
       } else {
-        await axios.post('/api/follow', { userId });
+        await axios.post('/api/join', {userId,communityId});
+        console.log("Followed");
       }
 
       setLoading(false);
@@ -52,6 +53,6 @@ const useFollow = (userId: string) => {
   };
 };
 
-export default useFollow;
+export default useCommunityFollow;
 
 

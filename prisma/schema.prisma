@@ -73,6 +73,7 @@ model Notification {
 model Community {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   name         String
+  description  String?
   profileImage String?
   userIds      String[] @db.ObjectId
   postIds      String[] @db.ObjectId

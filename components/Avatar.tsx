@@ -6,7 +6,7 @@ import { useCallback } from "react";
 import useUser from "@/hooks/useUser";
 
 interface AvatarProps {
-  userId: string;
+  userId?: string;
   isLarge?: boolean;
   hasBorder?: boolean;
   communityImage?: string;
@@ -16,7 +16,7 @@ interface AvatarProps {
 
 const Avatar: React.FC<AvatarProps> = ({ userId, isLarge, hasBorder, isCommunity, communityImage, communityId }) => {
   const router = useRouter();
-  const { data: fetchedUser } = useUser(userId);
+  const { data: fetchedUser } = useUser(userId!);
 
   const onClick = useCallback((event: any) => {
     event.stopPropagation();

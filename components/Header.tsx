@@ -6,7 +6,7 @@ import { ModeToggle } from "./ui/toggle";
 
 interface HeaderProps {
   showBackArrow?: boolean;
-  label: string;
+  label?: string;
 }
 
 const Header: React.FC<HeaderProps> = ({showBackArrow, label }) => {
@@ -33,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({showBackArrow, label }) => {
           {label==="home" && (
             <div className="pl-5"></div>
           )}
-          {label}
+          {label?label:""}
         </h1>
         <div className='ml-auto p-3'>
           <ModeToggle/>

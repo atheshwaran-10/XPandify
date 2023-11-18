@@ -16,22 +16,21 @@ const AddModal = () =>
   const AddModal = useAddModal();
   const { data: currentUser } = useCurrentUser();
   const [name, setname] = useState('');
+  const [desc, setdesc] = useState('');
   const [profileImage, setProfileImage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const loginModal=useLoginModal();
-  const router=useRouter();
+  console.log(desc)
   const onSubmit = useCallback(async () => {
   if (!currentUser) {
-    // Redirect to login if user is not logged in
     loginModal.onOpen();
     return;
   }
-
   try {
     setIsLoading(true);
-   
     const communityData = {
       name: name,
+      desc:desc,
       ownerId: currentUser.id,
       profileImage: profileImage,
     };
@@ -46,7 +45,7 @@ const AddModal = () =>
   } finally {
     setIsLoading(false);
   }
-}, [name, profileImage, currentUser, setIsLoading, loginModal, AddModal]);
+}, [name, profileImage, currentUser, setIsLoading, loginModal, AddModal,desc]);
 
 
 
@@ -59,6 +58,12 @@ const AddModal = () =>
         placeholder="Community Name"
         onChange={(e) => setname(e.target.value)}
         value={name}
+        disabled={isLoading}  
+      />
+       <Input 
+        placeholder="Community Description"
+        onChange={(e) => setdesc(e.target.value)}
+        value={desc}
         disabled={isLoading}  
       />
     </div>
