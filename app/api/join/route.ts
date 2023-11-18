@@ -3,10 +3,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import prisma from '@/libs/prismadb';
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request, res: NextApiResponse) 
+export async function POST(req: Request) 
 {
   if (req.method !== 'POST' && req.method !== 'DELETE') {
-    return res.status(405).end();
+    return NextResponse.json("UnAuthorized")
   }
   const {userId,communityId}=await req.json();
   console.log(userId)
@@ -55,7 +55,7 @@ export async function POST(req: Request, res: NextApiResponse)
   }
 }
 
-export async function DELETE(req: Request, res: NextApiResponse) {
+export async function DELETE(req: Request) {
   const {userId,communityId}=await req.json();
   try
   {
@@ -66,7 +66,7 @@ export async function DELETE(req: Request, res: NextApiResponse) {
     });
 
     if (!community) {
-      return res.status(404).json({ message: "Community not found" });
+      return NextResponse.json("Community Not Found")
     }
     const user = await prisma.user.findUnique({
       where: {
@@ -75,7 +75,7 @@ export async function DELETE(req: Request, res: NextApiResponse) {
     });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+        return NextResponse.json("User Not Found")
     }
   
       const updatedCommunity = await prisma.community.update({
