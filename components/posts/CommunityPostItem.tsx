@@ -6,22 +6,22 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import Image from 'next/image';
 import useLoginModal from '@/hooks/useLoginModal';
 import useCurrentUser from '@/hooks/useCurrentUser';
-import useLike from '@/hooks/useLike';
-
+import useCommunityLike from '@/hooks/useCommunityLike';
 import Avatar from '../Avatar';
+
 interface PostItemProps {
   data: Record<string, any>;
   userId?: string;
+  communityId:string
 }
 
-const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
+const CommunityPostItem: React.FC<PostItemProps> = ({ data = {}, userId ,communityId}) => {
   const router = useRouter();
   const loginModal = useLoginModal();
 
- 
 
   const { data: currentUser } = useCurrentUser();
-  const { hasLiked, toggleLike } = useLike({ postId: data.id, userId});
+  const { hasLiked, toggleLike } = useCommunityLike({ postId: data.id, userId:userId,communityId:communityId});
 
   const goToUser = useCallback((ev: any) => {
     ev.stopPropagation();
@@ -143,4 +143,4 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
   )
 }
 
-export default PostItem;
+export default CommunityPostItem;

@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const currentUser = await serverAuth(req, res);
-    const { body } = req.body;
+    const { body,image } = req.body;
     const { postId } = req.query;
 
     if (!postId || typeof postId !== 'string') {
@@ -20,6 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const comment = await prisma.comment.create({
       data: {
         body,
+        image:image,
         userId: currentUser?.currentUser.id!,
         postId
       }

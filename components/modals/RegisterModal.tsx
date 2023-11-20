@@ -25,7 +25,6 @@ const RegisterModal = () => {
     if (isLoading) {
       return;
     }
-  
     registerModal.onClose();
     loginModal.onOpen();
   }, [loginModal, registerModal, isLoading]);
@@ -48,7 +47,17 @@ const RegisterModal = () => {
       signIn('credentials', {
         email,
         password,
-      });
+      }
+      ).then((callback) => {
+        if (callback?.error) {
+          toast.error('Invalid credentials!');
+        }
+        if (callback?.ok && !callback?.error) {
+          
+          toast.success('Login Successfull');
+        }
+      })
+      .finally(() => setIsLoading(false));
 
       registerModal.onClose();
     } catch (error) {

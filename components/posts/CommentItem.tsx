@@ -1,7 +1,8 @@
-import { useRouter } from 'next/router';
+"use client"
+import { useRouter } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
 import { formatDistanceToNowStrict } from 'date-fns';
-
+import Image from 'next/image';
 import Avatar from '../Avatar';
 
 interface CommentItemProps {
@@ -65,6 +66,13 @@ const CommentItem: React.FC<CommentItemProps> = ({ data = {} }) => {
           </div>
           <div className="  mt-1">
             {data.body}
+          </div>
+          <div className="  mt-1">
+          {
+            data.image && (
+              <Image height={30} width={30} src={data.image} alt=''/>
+            )
+          }
           </div>
         </div>
       </div>

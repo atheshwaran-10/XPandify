@@ -1,17 +1,18 @@
-import { useRouter } from "next/router";
+"use client"
 import { ClipLoader } from "react-spinners";
-
+import Header from "@/components/Header";
 import usePost from "@/hooks/usePost";
 
-import Header from "@/components/Header";
 import Form from "@/components/Form";
 import PostItem from "@/components/posts/PostItem";
 import CommentFeed from "@/components/posts/CommentFeed";
 
-
-const PostView = () => {
-  const router = useRouter();
-  const { postId } = router.query;
+const PostView = ({
+  params
+}:{
+  params:{postId:string}
+}) => {
+  const  postId = params.postId;
 
   const { data: fetchedPost, isLoading } = usePost(postId as string);
 
@@ -25,9 +26,9 @@ const PostView = () => {
 
   return ( 
     <>
-      <Header  label="Tweet" />
+      <Header showBackArrow  label="Posts" />
       <PostItem data={fetchedPost} />
-      <Form postId={postId as string} isComment placeholder="Tweet your reply" />
+      <Form postId={postId as string} isComment placeholder="Post your reply" />
       <CommentFeed comments={fetchedPost?.comments} />
     </>
    );

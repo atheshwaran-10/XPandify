@@ -17,16 +17,25 @@ const LoginModal = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = useCallback(async () => {
+  const onSubmit = async () => {
     try {
       setIsLoading(true);
-
       await signIn('credentials', {
         email,
         password,
-      });
-
-      toast.success('Logged in');
+         redirect: false,
+      }).then((callback) => {
+        if (callback?.error) 
+        {
+          toast.error('Invalid credentials!');
+        }
+        if (callback?.ok && !callback?.error)
+        {
+          
+          toast.success('Login Successfull');
+        }
+      })
+      .finally(() => setIsLoading(false))
 
       loginModal.onClose();
     } catch (error) {
@@ -34,7 +43,7 @@ const LoginModal = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [email, password, loginModal]);
+  };
 
   const onToggle = useCallback(() => {
     loginModal.onClose();

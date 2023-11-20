@@ -5,28 +5,26 @@ import EmojiPicker from 'emoji-picker-react';
 import { toast } from 'react-hot-toast';
 import { ImageIcon } from 'lucide-react';
 import { BsEmojiSmile } from 'react-icons/bs';
-import { FileUpload } from './FileUpload';
+import { FileUpload } from '@/components/FileUpload';
 import Image from 'next/image';
-import useLoginModal from '@/hooks/useLoginModal';
-import useRegisterModal from '@/hooks/useRegisterModal';
 import useCurrentUser from '@/hooks/useCurrentUser';
-import usePosts from '@/hooks/usePosts';
+import useCommunityPosts from '@/hooks/useCommunityPosts';
+import Avatar from '@/components/Avatar';
+import Button from '@/components/Button';
 import usePost from '@/hooks/usePost';
-import Avatar from './Avatar';
-import Button from './Button';
 
 interface FormProps {
+  communityId:string,
   placeholder: string;
   isComment?: boolean;
   postId?: string;
+  userIds:string[]
 }
 
-const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
-  const registerModal = useRegisterModal();
-  const loginModal = useLoginModal();
-
+const CommunityForm: React.FC<FormProps> = ({ placeholder, isComment, postId,communityId,userIds }) => {
+  
   const { data: currentUser } = useCurrentUser();
-  const { mutate: mutatePosts } = usePosts();
+  const { mutate: mutatePosts } = useCommunityPosts(communityId,currentUser?.id);
   const { mutate: mutatePost } = usePost(postId as string);
 
   const [body, setBody] = useState('');
@@ -35,12 +33,11 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   const [image,setImage]=useState<string|null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = useCallback(async (tempImage:string) => {
+  const onSubmit = useCallback(async (tempImage:string|null) => {
     try {
-      
       setIsLoading(true);
-      const url = isComment ? `/api/comments?postId=${postId}` : '/api/posts';
-      await axios.post(url, { body,image:tempImage });
+      const url = isComment ? `/api/comments?postId=${postId}` : '/api/CommunityPosts';
+      await axios.post(url, { body,image:tempImage,communityId,userId:currentUser.id });
       toast.success('Tweet created');
       setBody('');
       setImage(null)
@@ -53,13 +50,13 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [body, mutatePosts, isComment, postId, mutatePost]);
+  }, [body, mutatePosts, isComment, postId, mutatePost,communityId,currentUser?.id]);
 
 
 
   return (
     <div className="border-b-[1px] border px-5 py-2">
-      {currentUser ? (
+      {currentUser && userIds.includes(currentUser.id) ? (
         <div className="flex flex-row gap-4">
           <div>
             <Avatar userId={currentUser?.id} />
@@ -134,21 +131,17 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
             </div>
 
             <div className="mt-4 flex flex-row justify-end">
-              <Button disabled={isLoading || !body} onClick={()=>{onSubmit(image!)}} label="Tweet" />
+              <Button disabled={isLoading || !body} onClick={()=>{onSubmit(image)}} label="Tweet" />
             </div>
           </div>
         </div>
       ) : (
-        <div className="py-8">
-          <h1 className="  text-2xl text-center mb-4 font-bold">Welcome to Twitter</h1>
-          <div className="flex flex-row items-center justify-center gap-4">
-            <Button label="Login" onClick={loginModal.onOpen} />
-            <Button label="Register" onClick={registerModal.onOpen} secondary />
-          </div>
+        <div className="py-4">
+          <h1 className="text-2xl text-center mb-4 font-bold">Join the community to post your thoughts</h1>
         </div>
       )}
     </div>
   );
 };
 
-export default Form;
+export default CommunityForm;

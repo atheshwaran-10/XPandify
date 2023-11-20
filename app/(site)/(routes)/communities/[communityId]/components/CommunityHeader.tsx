@@ -30,25 +30,22 @@ const CommunityHeader: React.FC<CommunityHeaderProps> = ({ community }) => {
         <Image src={community.profileImage!} fill alt="Cover Image" style={{ objectFit: 'cover' }}/>
       </div>
         <div className='bg-sky-300 h-2 w-full'/>
-      <div className='bg-sky-500 pb-5'>
+      <div className='bg-sky-500'>
         <div className='font-extrabold text-4xl p-3'>
           {community.name}
-        </div>
-        <div className='p-4'>
-          {community.description}
         </div>
          <div className='p-4  flex flex-row'>
           <CommunityMembers community={community}/>
           <h2 className='pl-16 -mt-3'>
             {community.userIds.length} Members
           </h2>
-          <div className='ml-auto border rounded-lg'>
+          <div className='ml-auto border rounded-lg '>
               <Button
                 disabled={loading}
                 onClick={toggleFollow} 
                 value={isFollowing ? 'Unfollow' : 'Follow'}
                 variant={hovered ? (isFollowing ? 'destructive' : 'default') : (isFollowing ? 'ghost' : 'outline')}
-                className={loading? " hover:cursor-wait" : "hover:cursor-pointer"}
+                className={loading? " hover:cursor-wait" : "hover:cursor-pointer"+""}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
               >

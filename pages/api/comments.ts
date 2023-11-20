@@ -10,9 +10,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const currentUser = await serverAuth(req, res);
-    const { body } = req.body;
+    const { body,image } = req.body;
     const { postId } = req.query;
-
+    console.log("Hello")
     if (!postId || typeof postId !== 'string') {
       throw new Error('Invalid ID');
     }
@@ -20,6 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const comment = await prisma.comment.create({
       data: {
         body,
+        image,
         userId: currentUser?.currentUser.id!,
         postId
       }
