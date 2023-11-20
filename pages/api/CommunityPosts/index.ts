@@ -44,7 +44,6 @@ export default  async function handler(req: NextApiRequest,res:NextApiResponse) 
         });
         return res.status(200).json(newPost)
     }
-      
     if(req.method==="GET")
     {
       
@@ -67,15 +66,13 @@ export default  async function handler(req: NextApiRequest,res:NextApiResponse) 
           },
         });
 
-      
-
         return  res.status(200).json(posts);
     }
   }
   catch(e:any)
   {
-     console.log(e);
-    return res.status(400).end();
+    console.log(e);
+    return res.status(400).json(e);
   }
       
 
