@@ -1,5 +1,5 @@
 "use client"
-import prisma from "@/libs/prismadb"
+import useCommunities from "@/hooks/useCommunities";
 import { useCallback, useState } from "react";
 import { toast } from "react-hot-toast";
 import useCurrentUser from '@/hooks/useCurrentUser';
@@ -19,33 +19,52 @@ const AddModal = () =>
   const [desc, setdesc] = useState('');
   const [profileImage, setProfileImage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { mutate: mutateCommunities } = useCommunities();
   const loginModal=useLoginModal();
   console.log(desc)
-  const onSubmit = useCallback(async () => {
-  if (!currentUser) {
-    loginModal.onOpen();
-    return;
-  }
-  try {
-    setIsLoading(true);
-    const communityData = {
-      name: name,
-      desc:desc,
-      ownerId: currentUser.id,
-      profileImage: profileImage,
-    };
-    const response = await axios.post('/api/addcommunity', communityData);
-    const createdCommunity = response.data;
-    console.log(createdCommunity);
-    toast.success("Community has been Created");
-    AddModal.onClose();
-  } catch (error) {
-    console.error(error);
-    toast.error('Something went wrong');
-  } finally {
-    setIsLoading(false);
-  }
-}, [name, profileImage, currentUser, setIsLoading, loginModal, AddModal,desc]);
+  const onSubmit = useCallback(async () => 
+  {
+    if (!currentUser) {
+      loginModal.onOpen();
+      return;
+    }
+    if(name==='')
+    {
+      toast.error("Community Name is Required")
+      return
+    }
+    else if(desc==='')
+    {
+      toast.error("Description is Required")
+      return
+    }
+    else if(profileImage==='')
+    {
+      toast.error("Profile Image is Required")
+      return
+    }
+    try 
+    {
+      setIsLoading(true);
+      const communityData = {
+        name: name,
+        desc:desc,
+        ownerId: currentUser.id,
+        profileImage: profileImage,
+      };
+      const response = await axios.post('/api/addcommunity', communityData);
+      const createdCommunity = response.data;
+      console.log(createdCommunity);
+      mutateCommunities();
+      toast.success("Community has been Created");
+      AddModal.onClose();
+    } catch (error) {
+      console.error(error);
+      toast.error('Something went wrong');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [name, profileImage,mutateCommunities, currentUser, setIsLoading, loginModal, AddModal,desc]);
 
 
 
@@ -55,12 +74,14 @@ const AddModal = () =>
         <ImageUpload value={profileImage} disabled={isLoading} onChange={(image) => setProfileImage(image)} label="Upload profile image" />
       </div>
       <Input 
+        required={true}
         placeholder="Community Name"
         onChange={(e) => setname(e.target.value)}
         value={name}
         disabled={isLoading}  
       />
        <Input 
+        required={true}
         placeholder="Community Description"
         onChange={(e) => setdesc(e.target.value)}
         value={desc}

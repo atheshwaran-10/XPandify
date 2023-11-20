@@ -12,7 +12,6 @@ import { Community, User } from '@prisma/client';
 import CommunityBadge from './CommunityBadge';
 
 const Header = () => {
- const router = useRouter();
   const { data: communities = [] } = useCommunities();
   const [value, setValue] = useState("");
   const [filteredCommunities, setfilteredCommunities] = useState([]);

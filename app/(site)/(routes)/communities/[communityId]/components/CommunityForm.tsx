@@ -24,7 +24,7 @@ interface FormProps {
 const CommunityForm: React.FC<FormProps> = ({ placeholder, isComment, postId,communityId,userIds }) => {
   
   const { data: currentUser } = useCurrentUser();
-  const { mutate: mutatePosts } = useCommunityPosts(communityId,currentUser?.id);
+  const { mutate: mutatePosts } = useCommunityPosts(communityId);
   const { mutate: mutatePost } = usePost(postId as string);
 
   const [body, setBody] = useState('');
@@ -38,7 +38,7 @@ const CommunityForm: React.FC<FormProps> = ({ placeholder, isComment, postId,com
       setIsLoading(true);
       const url = isComment ? `/api/comments?postId=${postId}` : '/api/CommunityPosts';
       await axios.post(url, { body,image:tempImage,communityId,userId:currentUser.id });
-      toast.success('Tweet created');
+      toast.success('Post created');
       setBody('');
       setImage(null)
       setView(false);
@@ -131,7 +131,7 @@ const CommunityForm: React.FC<FormProps> = ({ placeholder, isComment, postId,com
             </div>
 
             <div className="mt-4 flex flex-row justify-end">
-              <Button disabled={isLoading || !body} onClick={()=>{onSubmit(image)}} label="Tweet" />
+              <Button disabled={isLoading || !body} onClick={()=>{onSubmit(image)}} label="Post" />
             </div>
           </div>
         </div>

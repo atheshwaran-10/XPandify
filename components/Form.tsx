@@ -41,7 +41,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
       setIsLoading(true);
       const url = isComment ? `/api/comments?postId=${postId}` : '/api/posts';
       await axios.post(url, { body,image:tempImage });
-      toast.success('Tweet created');
+      toast.success('Post created');
       setBody('');
       setImage(null)
       setView(false);
@@ -134,7 +134,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
             </div>
 
             <div className="mt-4 flex flex-row justify-end">
-              <Button disabled={isLoading || !body} onClick={()=>{onSubmit(image!)}} label="Tweet" />
+              <Button disabled={isLoading || !body} onClick={()=>{onSubmit(image!)}} label="Post" />
             </div>
           </div>
         </div>
