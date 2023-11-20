@@ -47,25 +47,45 @@ export default  async function handler(req: NextApiRequest,res:NextApiResponse) 
     if(req.method==="GET")
     {
       
-        const { communityId } =  req.query;
+        const { communityId,userId } =  req.query;
 
         if (!communityId ) {
           return res.status(200).json({ error: 'Community ID is required' });
         }
-
-        const posts = await prisma.post.findMany({
-          where: {
-            communityIds: { has: communityId as string },
-          },
-           include: {
-            user: true,
-            comments: true
-          },
-          orderBy: {
-            createdAt: 'desc'
-          },
-        });
-
+        let posts;
+        if (userId && typeof userId === 'string') 
+        {
+            posts = await prisma.post.findMany({
+            where: {
+              userId,
+              communityIds: { has: communityId as string },
+            },
+            include: {
+              user: true,
+              comments: true,
+              Community:true,
+            },
+            orderBy: {
+              createdAt: 'desc'
+            },
+            });
+        } 
+        else 
+        {
+          posts = await prisma.post.findMany({
+             where: {
+              communityIds: { has: communityId as string },
+            },
+            include: {
+              user: true,
+              comments: true,
+              Community: true 
+            },
+            orderBy: {
+              createdAt: 'desc'
+            }
+          });
+        }
         return  res.status(200).json(posts);
     }
   }
