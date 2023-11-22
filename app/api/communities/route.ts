@@ -1,7 +1,7 @@
 import {  NextApiResponse } from "next";
 
 import prisma from '@/libs/prismadb';
-
+import { NextResponse } from "next/server";
 
 export const config = {
   api: {
@@ -9,19 +9,18 @@ export const config = {
   },
 }
 
-
-export default  async function handler(req: Request, res: NextApiResponse) 
+export  async function GET(req: Request, res: NextApiResponse) 
 {
   if (req.method !== 'POST' && req.method !== 'GET') {
-    return res.status(405).end();
+    return NextResponse.json("UnAuthorized");
   }
   try
   {
     const communities = await prisma.community.findMany();
-    return  res.status(200).json(communities)
+    return  NextResponse.json(communities)
   } 
   catch(error) {
     console.log(error);
-    return res.status(400).json(error);  
+     return NextResponse.json(error);
   }
 }
