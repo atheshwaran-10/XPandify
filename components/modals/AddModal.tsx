@@ -9,9 +9,13 @@ import Modal from "../Modal";
 import ImageUpload from "../ImageUpload";
 import axios from "axios";
 import useLoginModal from "@/hooks/useLoginModal";
-import { useRouter } from "next/navigation";
+import useCommunity from "@/hooks/useCommunity";
 
-const AddModal = () =>
+interface AddModalProps{
+  communityId?:string
+}
+
+const AddModal:React.FC<AddModalProps> = ({communityId}) =>
 {
   const AddModal = useAddModal();
   const { data: currentUser } = useCurrentUser();
@@ -20,6 +24,7 @@ const AddModal = () =>
   const [profileImage, setProfileImage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { mutate: mutateCommunities } = useCommunities();
+  const { mutate: mutateCommunity } = useCommunity(communityId as string);
   const loginModal=useLoginModal();
   console.log(desc)
   const onSubmit = useCallback(async () => 
@@ -56,6 +61,7 @@ const AddModal = () =>
       const createdCommunity = response.data;
       console.log(createdCommunity);
       mutateCommunities();
+      mutateCommunity();
       toast.success("Community has been Created");
       AddModal.onClose();
     } catch (error) {
