@@ -3,11 +3,7 @@ import {  NextApiResponse } from "next";
 import prisma from '@/libs/prismadb';
 import { NextResponse } from "next/server";
 
-export const config = {
-  api: {
-    responseLimit: false,
-  },
-}
+
 
 export  async function GET(req: Request, res: NextApiResponse) 
 {
