@@ -9,6 +9,7 @@ import CommunityBadge from './CommunityBadge';
 
 const Header = () => {
   const { data: communities = [] } = useCommunities();
+    const { mutate: mutateCommunities } = useCommunities();
   const [value, setValue] = useState("");
   const [filteredCommunities, setfilteredCommunities] = useState([]);
   const addModal=useAddModal();
@@ -20,8 +21,8 @@ const Header = () => {
       user.name?.toLowerCase().includes(value.toLowerCase())
     );
     setfilteredCommunities(filtered);
-    useCommunities()
-  }, [setfilteredCommunities,communities,value]);
+    mutateCommunities()
+  }, [setfilteredCommunities,mutateCommunities,communities,value]);
 
 
   const searchUsers = () => {
