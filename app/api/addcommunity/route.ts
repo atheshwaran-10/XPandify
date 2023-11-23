@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export  async function POST(req:Request) {
 
-  const { name, ownerId, profileImage,desc } =await req.json();
+  const { name, ownerId, profileImage,desc,theme } =await req.json();
 
   try {
     const createdCommunity = await prisma.community.create({
@@ -11,6 +11,7 @@ export  async function POST(req:Request) {
         name: name,
         description:desc,
         ownerId: ownerId,
+        theme:theme,
         profileImage: profileImage,
         userIds:[ownerId]
       },

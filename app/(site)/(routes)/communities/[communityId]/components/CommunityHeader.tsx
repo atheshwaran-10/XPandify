@@ -6,6 +6,11 @@ import CommunityMembers from '@/components/communityMembers';
 import { Button } from '@/components/ui/button';
 import useCommunityFollow from '@/hooks/useCommunityFollow';
 import useCurrentUser from '@/hooks/useCurrentUser';
+import Options from './options';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import clsx from 'clsx';
 
 interface CommunityHeaderProps {
   community: Community;
@@ -19,18 +24,23 @@ const CommunityHeader: React.FC<CommunityHeaderProps> = ({ community }) => {
   const handleMouseEnter = () => {
     setHovered(true);
   };
-
+ 
   const handleMouseLeave = () => {
     setHovered(false);
   };
+
+  
+
+  console.log(currentUser?.id)
+  console.log(community.ownerId)
 
   return (
     <div className=''>
       <div className="bg-neutral-700 h-60 relative">
         <Image src={community.profileImage!} fill alt="Cover Image" style={{ objectFit: 'cover' }}/>
       </div>
-        <div className='bg-sky-300 h-2 w-full'/>
-      <div className='bg-sky-500'>
+     <div className={clsx(`bg-${community.theme}-300`, 'h-2', 'w-full')} />
+        <div className={clsx(`bg-${community.theme}-500`)} >
         <div className='font-extrabold text-4xl p-3'>
           {community.name}
         </div>
@@ -52,6 +62,14 @@ const CommunityHeader: React.FC<CommunityHeaderProps> = ({ community }) => {
               {hovered ? (isFollowing ? 'Leave' : 'Join') : (isFollowing ? 'Joined' : 'Join')}
             </Button>
             </div>
+            {
+              
+              currentUser?.id===community.ownerId && (
+                <div className='px-5 rounded-xl'>
+                  <Options community={community!}/>
+                </div>
+              )
+            }
         </div>
       </div>
     </div>

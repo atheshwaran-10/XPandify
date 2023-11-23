@@ -5,7 +5,6 @@ import Header from '@/components/Header'
 import CommunityInfo from './components/CommunityInfo'
 import CommunityPostFeed from '@/components/posts/CommunityPostFeed'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Form from '@/components/Form'
 import CommunityForm from './components/CommunityForm'
 
 const page = async ({
@@ -23,6 +22,7 @@ const page = async ({
       id:community?.ownerId
     }
   })
+
 
   const users=await prisma.user.findMany({
     where:{

@@ -1,5 +1,6 @@
 "use client"
 import useCommunities from "@/hooks/useCommunities";
+import ThemeSelector from "../ThemeSelector";
 import { useCallback, useState } from "react";
 import { toast } from "react-hot-toast";
 import useCurrentUser from '@/hooks/useCurrentUser';
@@ -28,7 +29,13 @@ const AddModal:React.FC<AddModalProps> = ({communityId}) =>
   const { mutate: mutateCommunities } = useCommunities();
   const { mutate: mutateCommunity } = useCommunity(communityId as string);
   const loginModal=useLoginModal();
-  console.log(desc)
+
+  const [selectedColor, setSelectedColor] = useState('sky');
+
+  const handleColorSelect = (color: string) => {
+    setSelectedColor(color);
+  };
+
   const onSubmit = useCallback(async () => 
   {
     if (!currentUser) {
@@ -45,7 +52,7 @@ const AddModal:React.FC<AddModalProps> = ({communityId}) =>
       toast.error("Description is Required")
       return
     }
-    else if(profileImage==='')
+    else if(profileImage===null)
     {
       toast.error("Profile Image is Required")
       return
@@ -57,11 +64,16 @@ const AddModal:React.FC<AddModalProps> = ({communityId}) =>
         name: name,
         desc:desc,
         ownerId: currentUser.id,
+        theme:selectedColor,
         profileImage: profileImage,
       };
       const response = await axios.post('/api/addcommunity', communityData);
       const createdCommunity = response.data;
       console.log(createdCommunity);
+      setname('');
+      setProfileImage(null)
+      setdesc('')
+      setSelectedColor('sky')
       mutateCommunities();
       mutateCommunity();
       toast.success("Community has been Created");
@@ -112,6 +124,35 @@ const AddModal:React.FC<AddModalProps> = ({communityId}) =>
         value={desc}
         disabled={isLoading}  
       />
+      <div className="flex flex-row gap-x-5">
+        <div className="flex flex-row gap-x-5">
+         <ThemeSelector
+          color="sky"
+          isSelected={selectedColor === 'sky'}
+          onSelectColor={handleColorSelect}
+        />
+        <ThemeSelector
+          color="green"
+          isSelected={selectedColor === 'green'}
+          onSelectColor={handleColorSelect}
+        />
+        <ThemeSelector
+          color="pink"
+          isSelected={selectedColor === 'pink'}
+          onSelectColor={handleColorSelect}
+        />
+        <ThemeSelector
+          color="red"
+          isSelected={selectedColor === 'red'}
+          onSelectColor={handleColorSelect}
+        />
+        <ThemeSelector
+          color="orange"
+          isSelected={selectedColor === 'orange'}
+          onSelectColor={handleColorSelect}
+        />
+      </div>
+      </div>
     </div>
   )
 
