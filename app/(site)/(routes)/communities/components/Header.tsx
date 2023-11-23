@@ -9,27 +9,12 @@ import CommunityBadge from './CommunityBadge';
 
 const Header = () => {
   const { data: communities = [] } = useCommunities();
-    const { mutate: mutateCommunities } = useCommunities();
   const [value, setValue] = useState("");
-  const [filteredCommunities, setfilteredCommunities] = useState([]);
   const addModal=useAddModal();
 
   
-  useEffect(() => {
-    const filtered = communities.filter((user:User) =>
-      user.username?.toLowerCase().includes(value.toLowerCase()) ||
-      user.name?.toLowerCase().includes(value.toLowerCase())
-    );
-    setfilteredCommunities(filtered);
-    mutateCommunities()
-  }, [setfilteredCommunities,mutateCommunities,communities,value]);
 
 
-  const searchUsers = () => {
-    const filteredwithname = communities.filter((user: { name: string; }) => user.name.toLowerCase().includes(value.toLowerCase()));
-    const combinedfilteredCommunities = Array.from(new Set([ ...filteredwithname]));
-    setfilteredCommunities(combinedfilteredCommunities as never[]);
-  };
 
 
   return (
@@ -43,14 +28,8 @@ const Header = () => {
                 type="search"
                 placeholder="Search..."
                 value={value}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    searchUsers();
-                  }
-                }}
                 onChange={(e) => {
                 setValue(e.target.value);
-                searchUsers(); 
                 }}
                 className="md:w-[100px] lg:w-[300px] "
               />
@@ -62,13 +41,13 @@ const Header = () => {
         </div>
         <div className="flex flex-col gap-6 mt-4">
           {
-            filteredCommunities.length===0 && (
+            communities.length===0 && (
               <div className='p-4 text-center'>
                 No Communities found
               </div>
             )
           }
-          {filteredCommunities.map((communtiy:Community) => (
+          {communities.map((communtiy:Community) => (
             <CommunityBadge key={communtiy.id} communtiy={communtiy}/>
           ))}
         </div>

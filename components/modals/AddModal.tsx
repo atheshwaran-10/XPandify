@@ -80,7 +80,7 @@ const AddModal:React.FC<AddModalProps> = ({communityId}) =>
     <div className="flex flex-col gap-4">
       <div className="cursor-pointer">
        {
-        profileImage && !ProfileView ? (
+        profileImage && ProfileView ? (
           <div  onClick={()=>SetProfileView(!ProfileView)} className="flex justify-center  px-3"  >
             <UserAvatar img={profileImage} isLarge />
           </div>
