@@ -2,22 +2,24 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-
+import UserAvatar from "../users/UserAvatar";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useEditModal from "@/hooks/useEditModal";
 import useUser from "@/hooks/useUser";
-
+import Image from "next/image";
 import Input from "../Input";
 import Modal from "../Modal";
-import ImageUpload from "../ImageUpload";
+import { FileUpload } from "../FileUpload";
 
 const EditModal = () => {
   const { data: currentUser } = useCurrentUser();
   const { mutate: mutateFetchedUser } = useUser(currentUser?.id);
   const editModal = useEditModal();
 
-  const [profileImage, setProfileImage] = useState('');
-  const [coverImage, setCoverImage] = useState('');
+  const [profileImage, setProfileImage] = useState<string|null>(null);
+  const [ProfileView,SetProfileView]=useState(false);
+  const [coverImage, setCoverImage] = useState<string|null>(null);
+  const [CoverView,SetCoverView]=useState(false);
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
@@ -50,8 +52,44 @@ const EditModal = () => {
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
-      <ImageUpload value={profileImage} disabled={isLoading} onChange={(image) => setProfileImage(image)} label="Upload profile image" />
-      <ImageUpload value={coverImage} disabled={isLoading} onChange={(image) => setCoverImage(image)} label="Upload cover image" />
+       {
+        coverImage && !CoverView ? (
+         <div>
+          <div className="bg-neutral-700 h-44 relative">
+              <Image src={coverImage} className="cursor-pointer" onClick={()=>SetCoverView(!CoverView)}  fill alt="Cover Image" style={{ objectFit: 'cover' }}/>
+          </div>
+        </div>
+        )
+        :(
+          <div>
+            <FileUpload  endpoint="postImage"
+            onChange={(url) => {
+              if (url) {
+                setCoverImage(url)
+                SetCoverView(!CoverView)
+              }
+            }} />
+          </div>
+        )
+      }
+      {
+        profileImage && !ProfileView ? (
+          <div  onClick={()=>SetProfileView(!ProfileView)} className="absolute pt-12 px-3"  >
+            <UserAvatar img={profileImage} isLarge />
+          </div>
+        )
+        :(
+          <div>
+            <FileUpload  endpoint="postImage"
+            onChange={(url) => {
+              if (url) {
+                setProfileImage(url)
+                SetProfileView(!ProfileView)
+              }
+            }} />
+          </div>
+        )
+      }
       <Input
         placeholder="Name"
         onChange={(e) => setName(e.target.value)}

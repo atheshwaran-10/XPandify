@@ -6,10 +6,11 @@ import useCurrentUser from '@/hooks/useCurrentUser';
 import useAddModal from "@/hooks/useAddModal";
 import Input from "../Input";
 import Modal from "../Modal";
-import ImageUpload from "../ImageUpload";
 import axios from "axios";
 import useLoginModal from "@/hooks/useLoginModal";
 import useCommunity from "@/hooks/useCommunity";
+import UserAvatar from "../users/UserAvatar";
+import { FileUpload } from "../FileUpload";
 
 interface AddModalProps{
   communityId?:string
@@ -21,8 +22,9 @@ const AddModal:React.FC<AddModalProps> = ({communityId}) =>
   const { data: currentUser } = useCurrentUser();
   const [name, setname] = useState('');
   const [desc, setdesc] = useState('');
-  const [profileImage, setProfileImage] = useState('');
+  const [profileImage, setProfileImage] = useState<string|null>(null);
   const [isLoading, setIsLoading] = useState(false);
+   const [ProfileView,SetProfileView]=useState(false);
   const { mutate: mutateCommunities } = useCommunities();
   const { mutate: mutateCommunity } = useCommunity(communityId as string);
   const loginModal=useLoginModal();
@@ -70,14 +72,31 @@ const AddModal:React.FC<AddModalProps> = ({communityId}) =>
     } finally {
       setIsLoading(false);
     }
-  }, [name, profileImage,mutateCommunities, currentUser, setIsLoading, loginModal, AddModal,desc]);
+  }, [name, profileImage,mutateCommunities,mutateCommunity, currentUser, setIsLoading, loginModal, AddModal,desc]);
 
 
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <div className="cursor-pointer">
-        <ImageUpload value={profileImage} disabled={isLoading} onChange={(image) => setProfileImage(image)} label="Upload profile image" />
+       {
+        profileImage && !ProfileView ? (
+          <div  onClick={()=>SetProfileView(!ProfileView)} className="flex justify-center  px-3"  >
+            <UserAvatar img={profileImage} isLarge />
+          </div>
+        )
+        :(
+          <div>
+            <FileUpload  endpoint="postImage"
+            onChange={(url) => {
+              if (url) {
+                setProfileImage(url)
+                SetProfileView(!ProfileView)
+              }
+            }} />
+          </div>
+        )
+      }
       </div>
       <Input 
         required={true}

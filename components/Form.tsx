@@ -1,6 +1,6 @@
 "use client"
 import axios from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { toast } from 'react-hot-toast';
 import { ImageIcon } from 'lucide-react';

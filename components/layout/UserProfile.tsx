@@ -1,11 +1,8 @@
 "use client"
 import React from 'react'
-import useUsers from '@/hooks/useUsers';
 import Avatar from '../Avatar';
-import { Input } from '../ui/input';
 import { useRouter } from 'next/navigation';
 import useFollow from '@/hooks/useFollow';
-import { useEffect, useState } from 'react';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import { Button } from '../ui/button';
 import { User } from '@prisma/client';
