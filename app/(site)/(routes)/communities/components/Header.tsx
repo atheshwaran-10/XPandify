@@ -1,11 +1,7 @@
 "use client"
 import useCommunities from '@/hooks/useCommunities';
 import { Input } from '@/components/ui/input';
-import { useRouter } from 'next/navigation';
-import useFollow from '@/hooks/useFollow';
 import { useEffect, useState } from 'react';
-import useCurrentUser from '@/hooks/useCurrentUser';
-import Avatar from '@/components/Avatar';
 import useAddModal from '@/hooks/useAddModal';
 import { Plus } from 'lucide-react';
 import { Community, User } from '@prisma/client';
@@ -24,6 +20,7 @@ const Header = () => {
       user.name?.toLowerCase().includes(value.toLowerCase())
     );
     setfilteredCommunities(filtered);
+    useCommunities()
   }, [setfilteredCommunities,communities,value]);
 
 
