@@ -4,16 +4,17 @@ import React from 'react'
 import { Calendar,Users2Icon,Globe } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import UsersView from './UsersView'
+import useUser from '@/hooks/useUser'
 interface CommunityInfoProps{
   community:Community,
-  owner:User
   users:User[]
 }
 
 const CommunityInfo:React.FC<CommunityInfoProps> = ({
-  community,owner,users
+  community,users
 }) => {
   const router=useRouter();
+  const {data:owner}=useUser(community.ownerId)
   return (
     <div>
       <h2 className='font-bold text-xl p-3'>Community Info</h2>
@@ -25,11 +26,11 @@ const CommunityInfo:React.FC<CommunityInfoProps> = ({
         </div>
          <div className='flex flex-row p-3 gap-5'>
             <Globe/>
-            {community.createdAt ? community.createdAt.toDateString() : null}
+            All Communities are publicly visible.
         </div>
         <div className='flex flex-row p-3 gap-5'>
             <Calendar/>
-            Created at {community.createdAt ? community.createdAt.toDateString() : null} by
+            Created at {community.createdAt ? new Date(community.createdAt).toDateString() : null} by
             <div className='font-bold font-xl hover:underline cursor-pointer -ml-[15px]' onClick={()=>router.push(`/users/${owner.id}`)}>
               @{owner.username}
             </div>

@@ -1,32 +1,34 @@
 "use client"
 import useCommunities from "@/hooks/useCommunities";
 import ThemeSelector from "../ThemeSelector";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import useCurrentUser from '@/hooks/useCurrentUser';
-import useAddModal from "@/hooks/useAddModal";
 import Input from "../Input";
 import Modal from "../Modal";
 import axios from "axios";
 import useLoginModal from "@/hooks/useLoginModal";
+import useCommunity from "@/hooks/useCommunity";
 import UserAvatar from "../users/UserAvatar";
 import { FileUpload } from "../FileUpload";
+import useCommunityEditModal from "@/hooks/useCommunityEditModal";
+import { Community } from "@prisma/client";
 
-interface AddModalProps{
-  communityId?:string
+interface CommunityEditModalProps{
+  community:Community
 }
 
-const AddModal:React.FC<AddModalProps> = ({communityId}) =>
+const CommunityEditModal:React.FC<CommunityEditModalProps> = ({community}) =>
 {
-  const AddModal = useAddModal();
+  const editModal = useCommunityEditModal();
   const { data: currentUser } = useCurrentUser();
   const [name, setname] = useState('');
   const [desc, setdesc] = useState('');
   const [profileImage, setProfileImage] = useState<string|null>(null);
   const [isLoading, setIsLoading] = useState(false);
-   const [ProfileView,SetProfileView]=useState(false);
-   
+  const [ProfileView,SetProfileView]=useState(false);
   const { mutate: mutateCommunities } = useCommunities();
+  const { mutate: mutateCommunity } = useCommunity(community.id as string);
   const loginModal=useLoginModal();
 
   const [selectedColor, setSelectedColor] = useState('deepskyblue');
@@ -34,6 +36,15 @@ const AddModal:React.FC<AddModalProps> = ({communityId}) =>
   const handleColorSelect = (color: string) => {
     setSelectedColor(color);
   };
+
+  useEffect(()=>{
+    setProfileImage(community?.profileImage)
+    setname(community?.name)
+    setdesc(community?.description as string)
+    setSelectedColor(community?.theme as string)
+  },[community])
+
+  
 
   const onSubmit = useCallback(async () => 
   {
@@ -60,29 +71,30 @@ const AddModal:React.FC<AddModalProps> = ({communityId}) =>
     {
       setIsLoading(true);
       const communityData = {
+        communityId:community.id,
         name: name,
         desc:desc,
         ownerId: currentUser.id,
         theme:selectedColor,
         profileImage: profileImage,
       };
-      const response = await axios.post('/api/addcommunity', communityData);
+      const response = await axios.patch('/api/addcommunity', communityData);
       const createdCommunity = response.data;
       setname('');
       setProfileImage(null)
       setdesc('')
       setSelectedColor('sky')
       mutateCommunities();
-    
-      toast.success("Community has been Created");
-      AddModal.onClose();
+      mutateCommunity();
+      toast.success("Community has been updated");
+      editModal.onClose();
     } catch (error) {
       console.error(error);
       toast.error('Something went wrong');
     } finally {
       setIsLoading(false);
     }
-  }, [name, profileImage,mutateCommunities, currentUser, setIsLoading, loginModal, AddModal,desc,selectedColor]);
+  }, [name, profileImage,mutateCommunities,mutateCommunity, currentUser, setIsLoading, loginModal,desc,community.id,editModal,selectedColor]);
 
 
 
@@ -90,7 +102,7 @@ const AddModal:React.FC<AddModalProps> = ({communityId}) =>
     <div className="flex flex-col gap-4">
       <div className="cursor-pointer">
        {
-        profileImage && ProfileView ? (
+        profileImage && !ProfileView ? (
           <div  onClick={()=>SetProfileView(!ProfileView)} className="flex justify-center  px-3"  >
             <UserAvatar img={profileImage} isLarge />
           </div>
@@ -150,29 +162,26 @@ const AddModal:React.FC<AddModalProps> = ({communityId}) =>
           onSelectColor={handleColorSelect}
         />
          <ThemeSelector
-          color="orange"
-          isSelected={selectedColor === 'orange'}
+          color="darkorange"
+          isSelected={selectedColor === 'darkorange'}
           onSelectColor={handleColorSelect}
         />
-      
       </div>
       </div>
     </div>
   )
 
-  
-
   return (
     <Modal
       disabled={isLoading}
-      isOpen={AddModal.isOpen}
-      title="Add Community"
-      actionLabel="Add Community"
-      onClose={AddModal.onClose}
+      isOpen={editModal.isOpen}
+      title="Edit Community"
+      actionLabel="Edit Community"
+      onClose={editModal.onClose}
       onSubmit={onSubmit}
       body={bodyContent}
     />
   );
 }
 
-export default AddModal;
+export default CommunityEditModal;

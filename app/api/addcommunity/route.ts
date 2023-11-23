@@ -33,3 +33,30 @@ export  async function POST(req:Request) {
     return NextResponse.json(error);
   }
 }
+export  async function PATCH(req:Request) {
+
+  const {communityId, name, ownerId, profileImage,desc,theme } =await req.json();
+
+  try {
+    const updatedCommunity = await prisma.community.update({
+      where: {
+       id:communityId
+      },
+      data:{
+        name: name,
+        description:desc,
+        ownerId: ownerId,
+        theme:theme,
+        profileImage: profileImage,
+      }
+    });
+
+
+    
+
+    return NextResponse.json(updatedCommunity);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(error);
+  }
+}

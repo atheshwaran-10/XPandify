@@ -14,7 +14,7 @@ export const fetchUserProfiles = async (community:Community) => {
       });
 
       const profileImages: string[] = users.map((user) => user.profileImage || '');
-      console.log(profileImages.length)
+      
       return profileImages
     } 
     catch (error) {

@@ -14,7 +14,12 @@ const ThemeSelector: React.FC<ThemeSelectorProps> = ({ color, isSelected, onSele
 
   return (
     <div
-      className={`h-10 w-10 cursor-pointer border border-white border-solid border-4  rounded-full bg-${color+'-500'}`}
+      className={`h-10 w-10 cursor-pointer border border-white border-solid border-4  rounded-full}`}
+     style={{
+        backgroundColor:`${color}`,
+        filter: 'brightness(105%)',
+        borderRadius:'100%',
+       }}
       onClick={handleColorClick}
     >
       {

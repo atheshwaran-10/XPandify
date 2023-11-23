@@ -67,7 +67,6 @@ model Notification {
   body      String
   userId    String   @db.ObjectId
   createdAt DateTime @default(now())
-
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -80,7 +79,7 @@ model Community {
   userIds      String[] @db.ObjectId
   postIds      String[] @db.ObjectId
   ownerId      String   @db.ObjectId
-  createdAt    DateTime? @default(now())
+  createdAt    DateTime @default(now())
   users        User[]   @relation(fields: [userIds], references: [id])
   posts        Post[]   @relation(fields: [postIds], references: [id])
 }

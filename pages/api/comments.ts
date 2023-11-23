@@ -12,7 +12,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const currentUser = await serverAuth(req, res);
     const { body,image } = req.body;
     const { postId } = req.query;
-    console.log("Hello")
     if (!postId || typeof postId !== 'string') {
       throw new Error('Invalid ID');
     }

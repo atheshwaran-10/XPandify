@@ -18,7 +18,6 @@ export default  async function handler(req: NextApiRequest,res:NextApiResponse) 
     if (req.method === 'POST') 
     {
         const{body,communityId,userId,image}= req.body;
-        console.log(communityId)
 
         const newPost = await prisma.post.create({
           data: {

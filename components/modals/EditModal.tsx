@@ -9,13 +9,14 @@ import useUser from "@/hooks/useUser";
 import Image from "next/image";
 import Input from "../Input";
 import Modal from "../Modal";
+import useCommunity from "@/hooks/useCommunity";
 import { FileUpload } from "../FileUpload";
 
 const EditModal = () => {
   const { data: currentUser } = useCurrentUser();
   const { mutate: mutateFetchedUser } = useUser(currentUser?.id);
   const editModal = useEditModal();
-
+ 
   const [profileImage, setProfileImage] = useState<string|null>(null);
   const [ProfileView,SetProfileView]=useState(false);
   const [coverImage, setCoverImage] = useState<string|null>(null);

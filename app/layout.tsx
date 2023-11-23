@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { ToastProvider } from "@/components/providers/toaster-provider";
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
+import { PrimeReactProvider } from 'primereact/api';
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -27,7 +28,9 @@ export default function RootLayout({
             disableTransitionOnChange
           >
           <ToastProvider/>
+          <PrimeReactProvider>
             {children}
+          </PrimeReactProvider>
         </ThemeProvider>
         </body>
     </html>

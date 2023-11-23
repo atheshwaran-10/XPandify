@@ -29,11 +29,11 @@ const useCommunityFollow = (userId: string,communityId:string) => {
       setLoading(true);
       if (isFollowing) {
         await axios.delete('/api/join', {data:{userId ,communityId}});
-        console.log("UnFollowed");
+      
         
       } else {
         await axios.post('/api/join', {userId,communityId});
-        console.log("Followed");
+      
       }
 
       setLoading(false);

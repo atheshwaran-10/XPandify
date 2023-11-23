@@ -8,9 +8,9 @@ import useCommunityFollow from '@/hooks/useCommunityFollow';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import Options from './options';
 import axios from 'axios';
+import clsx from 'clsx';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import clsx from 'clsx';
 
 interface CommunityHeaderProps {
   community: Community;
@@ -31,19 +31,27 @@ const CommunityHeader: React.FC<CommunityHeaderProps> = ({ community }) => {
 
   
 
-  console.log(currentUser?.id)
-  console.log(community.ownerId)
+  const dynamicClass300 = `bg-${community.theme}-300 h-2 w-full`;
+  const dynamicClass500 = `bg-${community.theme}-500`;
+
 
   return (
     <div className=''>
       <div className="bg-neutral-700 h-60 relative">
         <Image src={community.profileImage!} fill alt="Cover Image" style={{ objectFit: 'cover' }}/>
       </div>
-     <div className={clsx(`bg-${community.theme}-300`, 'h-2', 'w-full')} />
-        <div className={clsx(`bg-${community.theme}-500`)} >
-        <div className='font-extrabold text-4xl p-3'>
-          {community.name}
-        </div>
+       <div style={{
+        backgroundColor:`${community.theme}`,
+        filter: 'brightness(105%)'
+       }} className='h-2 w-full'/>
+
+       <div style={{
+          backgroundColor:`${community.theme}`,
+         filter: 'brightness(85%)'
+       }} >
+          <div className='font-extrabold text-4xl p-3'>
+            {community.name}
+          </div>
          <div className='p-4  flex flex-row'>
           <CommunityMembers community={community}/>
           <h2 className='pl-16 -mt-3'>

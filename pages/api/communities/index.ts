@@ -10,7 +10,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   if(req.method=="GET")
   {
-    console.log("Get")
     try
     {
       const communities = await prisma.community.findMany();

@@ -11,7 +11,7 @@ export const addCommunity=async(
         name:name
       }
     })
-    console.log(f)
+    
     return true;
   }
   catch(e:any)
