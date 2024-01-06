@@ -1,8 +1,11 @@
 "use client"
 import axios from 'axios';
 import { useCallback, useState } from 'react';
-import EmojiPicker from 'emoji-picker-react';
+import EmojiPicker, { Theme } from 'emoji-picker-react';
 import { toast } from 'react-hot-toast';
+import { useTheme } from 'next-themes';
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { ImageIcon } from 'lucide-react';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { FileUpload } from './FileUpload';
@@ -14,6 +17,13 @@ import usePosts from '@/hooks/usePosts';
 import usePost from '@/hooks/usePost';
 import Avatar from './Avatar';
 import Button from './Button';
+import GifInput from './GifInput';
+import { Editor } from './Editor';
+
+
+const formSchema = z.object({
+  description: z.string().min(1),
+});
 
 interface FormProps {
   placeholder: string;
@@ -21,7 +31,9 @@ interface FormProps {
   postId?: string;
 }
 
-const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
+
+
+const Forms: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
 
@@ -35,9 +47,14 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   const [image,setImage]=useState<string|null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+
+  const {setTheme,theme}=useTheme();
+  
+  
+
+
   const onSubmit = useCallback(async (tempImage:string) => {
     try {
-      
       setIsLoading(true);
       const url = isComment ? `/api/comments?postId=${postId}` : '/api/posts';
       await axios.post(url, { body,image:tempImage });
@@ -65,26 +82,14 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
             <Avatar userId={currentUser?.id} />
           </div>
           <div className="w-full">
-            <textarea
-              disabled={isLoading}
-              onChange={(event) =>setBody(event.target.value)}
-              value={body}
-              className="
-                disabled:opacity-80
-                peer
-                bg-white dark:bg-black
-                resize-none 
-                mt-3 
-                w-full 
-                ring-0 
-                outline-none 
-                text-[20px] 
-                border
-                rounded-md
-                p-3
-              "
-              placeholder={placeholder}>
-            </textarea>
+            <div>
+              <Editor
+              value={body}       
+              onChange={setBody}
+              />
+            </div>
+            
+            
             <hr 
               className="
                 opacity-0 
@@ -119,12 +124,12 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
               {
                 !view && (
                   <div className='mt-4 flex flex-row gap-2'>
-                    <ImageIcon className='cursor-pointer hover:bg-gray-700 rounded-full' color='#1D9BF0' size={22} onClick={()=>setView(true)}/>
-                    <BsEmojiSmile className='cursor-pointer hover:bg-gray-700 rounded-full' color='#1D9BF0' size={22} onClick={()=>setEmojiView((prev)=>!prev)}/>
+                    <ImageIcon className='cursor-pointer hover:bg-gray-200  dark:hover:bg-gray-700 rounded-full' color='#1D9BF0' size={22} onClick={()=>setView(true)}/>
+                    <BsEmojiSmile className='cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full' color='#1D9BF0' size={22} onClick={()=>setEmojiView((prev)=>!prev)}/>
                     {
                       emojiView && (
-                        <div className='mt-8 -ml-16'>
-                          <EmojiPicker height={400} width={300} onEmojiClick={(e)=>setBody((prev)=>prev+e.emoji)}/>
+                        <div className='mt-8 -ml-16 absolute z-20'>
+                          <EmojiPicker theme={theme==='light' ? Theme.LIGHT : Theme.DARK} height={400} width={300} onEmojiClick={(e)=>setBody((prev)=>`${prev}${e.emoji}`)}/>
                         </div>
                       )
                     }
@@ -151,4 +156,4 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   );
 };
 
-export default Form;
+export default Forms;
