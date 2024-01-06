@@ -4,7 +4,6 @@ import { useCallback, useMemo } from 'react';
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from 'react-icons/ai';
 import { formatDistanceToNowStrict } from 'date-fns';
 import Image from 'next/image';
-import { Preview } from '../Preview';
 import useLoginModal from '@/hooks/useLoginModal';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import useLike from '@/hooks/useLike';
@@ -93,9 +92,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
             </span>
           </div>
           <div className="  mt-1">
-            <Preview
-            value={data.body}
-            />
+           {data.body}
           </div>
            <div className="  mt-1">
             {

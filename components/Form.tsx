@@ -17,7 +17,6 @@ import usePosts from '@/hooks/usePosts';
 import usePost from '@/hooks/usePost';
 import Avatar from './Avatar';
 import Button from './Button';
-import { Editor } from './Editor';
 
 
 const formSchema = z.object({
@@ -81,15 +80,27 @@ const Forms: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
             <Avatar userId={currentUser?.id} />
           </div>
           <div className="w-full">
-            <div>
-              <Editor
-              value={body}       
-              onChange={setBody}
-              />
-            </div>
-            
-            
-            <hr 
+            <textarea
+              disabled={isLoading}
+              onChange={(event) => setBody(event.target.value)}
+              value={body}
+              className="
+                disabled:opacity-80
+                peer
+                bg-white dark:bg-black
+                resize-none 
+                mt-3 
+                w-full 
+                ring-0 
+                outline-none 
+                text-[20px] 
+                border
+                rounded-md
+                p-3
+              "
+              placeholder={placeholder}
+            ></textarea>
+            <hr
               className="
                 opacity-0 
                 peer-focus:opacity-100 
@@ -97,54 +108,79 @@ const Forms: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
                 w-full 
                 transition"
             />
-             <div className="">
-              {
-                !image && view ? (
-                  <div className='ml-auto'>
-                    <div className='flex flex-row-reverse justify-content-end '>
-                      <Button outline onClick={()=>setView(false)} label='Cancel'/>
-                    </div>
-                    <FileUpload  endpoint="postImage"
-                      onChange={(url) => {
-                        if (url) {
-                          setImage(url)
+            <div className="">
+              {!image && view ? (
+                <div className="ml-auto">
+                  <div className="flex flex-row-reverse justify-content-end ">
+                    <Button
+                      outline
+                      onClick={() => setView(false)}
+                      label="Cancel"
+                    />
+                  </div>
+                  <FileUpload
+                    endpoint="postImage"
+                    onChange={(url) => {
+                      if (url) {
+                        setImage(url);
+                      }
+                    }}
+                  />
+                </div>
+              ) : (
+                view &&
+                image && (
+                  <div className="flex justify-center items-center pt-6">
+                    <Image src={image!} alt="" height={80} width={80} />
+                  </div>
+                )
+              )}
+              {!view && (
+                <div className="mt-4 flex flex-row gap-2">
+                  <ImageIcon
+                    className="cursor-pointer hover:bg-gray-200  dark:hover:bg-gray-700 rounded-full"
+                    color="#1D9BF0"
+                    size={22}
+                    onClick={() => setView(true)}
+                  />
+                  <BsEmojiSmile
+                    className="cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full"
+                    color="#1D9BF0"
+                    size={22}
+                    onClick={() => setEmojiView((prev) => !prev)}
+                  />
+                  {emojiView && (
+                    <div className="mt-8 -ml-16 absolute z-20">
+                      <EmojiPicker
+                        theme={theme === "light" ? Theme.LIGHT : Theme.DARK}
+                        height={400}
+                        width={300}
+                        onEmojiClick={(e) =>
+                          setBody((prev) => `${prev}${e.emoji}`)
                         }
-                      }} />
-                  </div>
-                )
-                :
-                view && image &&
-                (
-                  <div className='flex justify-center items-center pt-6'>
-                    <Image src={image!} alt='' height={80} width={80}/>
-                  </div>
-                )
-              }
-              {
-                !view && (
-                  <div className='mt-4 flex flex-row gap-2'>
-                    <ImageIcon className='cursor-pointer hover:bg-gray-200  dark:hover:bg-gray-700 rounded-full' color='#1D9BF0' size={22} onClick={()=>setView(true)}/>
-                    <BsEmojiSmile className='cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full' color='#1D9BF0' size={22} onClick={()=>setEmojiView((prev)=>!prev)}/>
-                    {
-                      emojiView && (
-                        <div className='mt-8 -ml-16 absolute z-20'>
-                          <EmojiPicker theme={theme==='light' ? Theme.LIGHT : Theme.DARK} height={400} width={300} onEmojiClick={(e)=>setBody((prev)=>`${prev}${e.emoji}`)}/>
-                        </div>
-                      )
-                    }
-                  </div>
-                )
-              }
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="mt-4 flex flex-row justify-end">
-              <Button disabled={isLoading || !body} onClick={()=>{onSubmit(image!)}} label="Post" />
+              <Button
+                disabled={isLoading || !body}
+                onClick={() => {
+                  onSubmit(image!);
+                }}
+                label="Post"
+              />
             </div>
           </div>
         </div>
       ) : (
         <div className="py-8">
-          <h1 className="  text-2xl text-center mb-4 font-bold">Welcome to Twitter</h1>
+          <h1 className="  text-2xl text-center mb-4 font-bold">
+            Welcome to Twitter
+          </h1>
           <div className="flex flex-row items-center justify-center gap-4">
             <Button label="Login" onClick={loginModal.onOpen} />
             <Button label="Register" onClick={registerModal.onOpen} secondary />
