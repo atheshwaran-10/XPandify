@@ -12,7 +12,6 @@ import {
 } from "@mui/icons-material";
 //@ts-ignore
 import screenfull from "screenfull";
-import { findDOMNode } from "react-dom";
 
 const StyledPlayerControls = styled("div")`
   position: absolute;
@@ -68,9 +67,7 @@ const PlayerControls: React.FC<ReactPlayerProps> = (props) => {
     dispatch({ type: "VOLUME", payload: newValue });
   };
 
-  const handleFullscreen = () => {
-    screenfull.toggle(findDOMNode(wrapperRef.current) as Element);
-  };
+
 
   const handleSeek = (_event: Event, newValue: number | number[]) => {
     playerRef.current.seekTo(newValue as number);
@@ -141,13 +138,7 @@ const PlayerControls: React.FC<ReactPlayerProps> = (props) => {
     );
   };
 
-  const renderFullscreenButton = () => {
-    return (
-      <IconButton onClick={handleFullscreen}>
-        <FullscreenRounded sx={{ fontSize: "2rem", color: "white" }} />
-      </IconButton>
-    );
-  };
+ 
 
   return (
     <StyledPlayerControls className={"video-player__controls"}>
@@ -159,7 +150,6 @@ const PlayerControls: React.FC<ReactPlayerProps> = (props) => {
           {renderPlayButton()} {renderSoundSlider()} {renderDurationText()}
         </Stack>
         <Stack direction="row" alignItems="center" spacing={2}>
-          {renderFullscreenButton()}
         </Stack>
       </Stack>
     </StyledPlayerControls>
