@@ -41,7 +41,8 @@ model Post {
   userId    String   @db.ObjectId
   likedIds  String[] @db.ObjectId
   image     String?
-
+  video     String?
+  audio     String?
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   comments     Comment[]
@@ -53,6 +54,8 @@ model Comment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   body      String
   image     String?
+  video     String?
+  audio     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userId    String   @db.ObjectId

@@ -7,6 +7,8 @@ const nextConfig = {
     domains: [
       "utfs.io",
       "res.cloudinary.com",
+      "www.altnews.in",
+      "picsum.photos",
       "i.pinimg.com",
       "avatars.githubusercontent.com",
       "lh3.googleusercontent.com",

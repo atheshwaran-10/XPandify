@@ -12,6 +12,8 @@ export const ourFileRouter = {
   postAttachment: f(["text", "image", "video", "audio", "pdf"])
     .onUploadComplete(() => {}),
   postVideo: f({ video: { maxFileCount: 1, maxFileSize: "512GB" } })
+    .onUploadComplete(() => {}),
+  postaudio: f({ audio: { maxFileCount: 1, maxFileSize: "512MB" } })
     .onUploadComplete(() => {})
 } satisfies FileRouter;
  

@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const currentUser = await serverAuth(req, res);
-    const { body,image } = req.body;
+    const { body,image,video,audio } = req.body;
     const { postId } = req.query;
     if (!postId || typeof postId !== 'string') {
       throw new Error('Invalid ID');
@@ -20,6 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       data: {
         body,
         image,
+        video,
+        audio,
         userId: currentUser?.currentUser.id!,
         postId
       }

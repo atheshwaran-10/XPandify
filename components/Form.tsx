@@ -5,18 +5,19 @@ import EmojiPicker, { Theme } from 'emoji-picker-react';
 import { toast } from 'react-hot-toast';
 import { useTheme } from 'next-themes';
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ImageIcon } from 'lucide-react';
+import { ImageIcon, VideoIcon, Headphones,Videotape } from "lucide-react";
 import { BsEmojiSmile } from 'react-icons/bs';
 import { FileUpload } from './FileUpload';
 import Image from 'next/image';
 import useLoginModal from '@/hooks/useLoginModal';
 import useRegisterModal from '@/hooks/useRegisterModal';
+import Player from './player/Player';
 import useCurrentUser from '@/hooks/useCurrentUser';
 import usePosts from '@/hooks/usePosts';
 import usePost from '@/hooks/usePost';
 import Avatar from './Avatar';
 import Button from './Button';
+import MusicPlayer from './MusicPlayer';
 
 
 const formSchema = z.object({
@@ -40,26 +41,41 @@ const Forms: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   const { mutate: mutatePost } = usePost(postId as string);
 
   const [body, setBody] = useState('');
-  const [view,setView]=useState(false);
+
+
+  const [videoView,setVideoView]=useState(false);
+  const [audioView,setAudioView]=useState(false);
+  const [ImageView,setImageView]=useState(false);
   const [emojiView,setEmojiView]=useState(false)
+
+
+
+
   const [image,setImage]=useState<string|null>(null);
+  const [video, setVideo] = useState<string | null>(null);
+  const [audio, setAudio] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
 
-  const {setTheme,theme}=useTheme();
+  const {theme}=useTheme();
   
   
 
 
-  const onSubmit = useCallback(async (tempImage:string) => {
+  const onSubmit = useCallback(async (tempImage:string,tempVideo:string,tempAudio:string) => {
     try {
       setIsLoading(true);
       const url = isComment ? `/api/comments?postId=${postId}` : '/api/posts';
-      await axios.post(url, { body,image:tempImage });
+      console.log("I"+tempVideo);
+      await axios.post(url, { body,image:tempImage,video:tempVideo,audio:tempAudio });
       toast.success('Post created');
       setBody('');
       setImage(null)
-      setView(false);
+      setAudio(null);
+      setVideo(null);
+      setAudioView(false);
+      setVideoView(false);
+      setImageView(false);
       setEmojiView(false);
       mutatePosts();
       mutatePost();
@@ -109,12 +125,13 @@ const Forms: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
                 transition"
             />
             <div className="">
-              {!image && view ? (
+              {/* //!  Image Upload*/}
+              {!image && ImageView ? (
                 <div className="ml-auto">
                   <div className="flex flex-row-reverse justify-content-end ">
                     <Button
                       outline
-                      onClick={() => setView(false)}
+                      onClick={() => setImageView(false)}
                       label="Cancel"
                     />
                   </div>
@@ -128,21 +145,106 @@ const Forms: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
                   />
                 </div>
               ) : (
-                view &&
+                ImageView &&
                 image && (
-                  <div className="flex justify-center items-center pt-6">
-                    <Image src={image!} alt="" height={80} width={80} />
+                  <div className="flex justify-center items-center pt-5 -ml-6">
+                    <Image
+                      src={image!}
+                      alt=""
+                      height={480}
+                      width={480}
+                      className="rounded-lg"
+                    />
                   </div>
                 )
               )}
-              {!view && (
+
+              {/* //!  Video  Upload*/}
+
+              {!video && videoView ? (
+                <div className="ml-auto">
+                  <div className="flex flex-row-reverse justify-content-end ">
+                    <Button
+                      outline
+                      onClick={() => setVideoView(false)}
+                      label="Cancel"
+                    />
+                  </div>
+                  <FileUpload
+                    endpoint="postVideo"
+                    onChange={(url) => {
+                      if (url) {
+                        setVideo(url);
+                      }
+                    }}
+                  />
+                </div>
+              ) : (
+                videoView &&
+                video && (
+                  <div className="h-[320px] w-[500px] z-10">
+                    <Player
+                      url={video}
+                      light={
+                        "https://images.unsplash.com/photo-1655601597743-7ddd6fdc2903?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=700&q=80"
+                      }
+                    />
+                  </div>
+                )
+              )}
+
+              {/* //!  Audio Upload*/}
+
+              {!audio && audioView ? (
+                <div className="ml-auto">
+                  <div className="flex flex-row-reverse justify-content-end ">
+                    <Button
+                      outline
+                      onClick={() => setAudioView(false)}
+                      label="Cancel"
+                    />
+                  </div>
+                  <FileUpload
+                    endpoint="postaudio"
+                    onChange={(url) => {
+                      if (url) {
+                        setAudio(url);
+                      }
+                    }}
+                  />
+                </div>
+              ) : (
+                audioView &&
+                audio && (
+                  <div className="h-[320px] w-[500px] z-10">
+                    <MusicPlayer url={audio}></MusicPlayer>
+                  </div>
+                )
+              )}
+
+              {/* //!  Initial Upload Form*/}
+
+              {!ImageView && !videoView && !audioView && (
                 <div className="mt-4 flex flex-row gap-2">
                   <ImageIcon
                     className="cursor-pointer hover:bg-gray-200  dark:hover:bg-gray-700 rounded-full"
                     color="#1D9BF0"
                     size={22}
-                    onClick={() => setView(true)}
+                    onClick={() => setImageView(true)}
                   />
+                  <VideoIcon
+                    className="cursor-pointer hover:bg-gray-200  dark:hover:bg-gray-700 rounded-full"
+                    color="#1D9BF0"
+                    size={22}
+                    onClick={() => setVideoView(true)}
+                  />
+                  <Headphones
+                    className="cursor-pointer hover:bg-gray-200  dark:hover:bg-gray-700 rounded-full"
+                    color="#1D9BF0"
+                    size={22}
+                    onClick={() => setAudioView(true)}
+                  />
+
                   <BsEmojiSmile
                     className="cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full"
                     color="#1D9BF0"
@@ -169,7 +271,7 @@ const Forms: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
               <Button
                 disabled={isLoading || !body}
                 onClick={() => {
-                  onSubmit(image!);
+                  onSubmit(image!, video!, audio!);
                 }}
                 label="Post"
               />
