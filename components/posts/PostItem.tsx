@@ -66,7 +66,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
     >
       <div className="flex flex-row items-start gap-3">
         <Avatar userId={data.user.id} />
-        <div>
+        <div className='w-full'>
           <div className="flex flex-row items-center gap-2">
             <p
               onClick={goToUser}
@@ -107,9 +107,9 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
               </div>
             )}
           </div>
-          <div className="">
+          <div className="w-full">
             {data.video && (
-              <div className="h-[320px] w-[500px] z-10">
+              <div className="h-[320px] w-full  z-10">
                 <Player
                   url={data.video}
                   light={

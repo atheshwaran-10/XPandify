@@ -18,6 +18,8 @@ import usePost from '@/hooks/usePost';
 import Avatar from './Avatar';
 import Button from './Button';
 import MusicPlayer from './MusicPlayer';
+import { useRouter } from 'next/navigation';
+import { User } from '@prisma/client';
 
 
 const formSchema = z.object({
@@ -28,11 +30,12 @@ interface FormProps {
   placeholder: string;
   isComment?: boolean;
   postId?: string;
+  user?:User
 }
 
 
 
-const Forms: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
+const Forms: React.FC<FormProps> = ({ placeholder, isComment, postId,user }) => {
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
 
@@ -59,8 +62,11 @@ const Forms: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
 
   const {theme}=useTheme();
   
-  
+  const router=useRouter();
 
+  
+  if (user && !user?.emailVerified) router.push("/verify");
+  
 
   const onSubmit = useCallback(async (tempImage:string,tempVideo:string,tempAudio:string) => {
     try {
@@ -88,9 +94,10 @@ const Forms: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
 
 
 
+
   return (
     <div className="border-b-[1px] border px-5 py-2">
-      {currentUser ? (
+      {currentUser  ? (
         <div className="flex flex-row gap-4">
           <div>
             <Avatar userId={currentUser?.id} />
@@ -281,7 +288,7 @@ const Forms: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
       ) : (
         <div className="py-8">
           <h1 className="  text-2xl text-center mb-4 font-bold">
-            Welcome to Twitter
+            Welcome to Xpandify
           </h1>
           <div className="flex flex-row items-center justify-center gap-4">
             <Button label="Login" onClick={loginModal.onOpen} />

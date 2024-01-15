@@ -7,7 +7,8 @@ import useCurrentUser from "./useCurrentUser";
 import useLoginModal from "./useLoginModal";
 import useUser from "./useUser";
 
-const useFollow = (userId: string) => {
+const useFollow = (userId: string) =>
+{
   const { data: currentUser, mutate: mutateCurrentUser } = useCurrentUser();
   const { mutate: mutateFetchedUser } = useUser(userId);
   const [loading, setLoading] = useState(false);
@@ -28,10 +29,12 @@ const useFollow = (userId: string) => {
     try 
     {
       setLoading(true);
-
-      if (isFollowing) {
+      if (isFollowing) 
+      {
         await axios.delete('/api/follow', { data: { userId } });
-      } else {
+      } 
+      else
+      {
         await axios.post('/api/follow', { userId });
       }
 
@@ -39,7 +42,9 @@ const useFollow = (userId: string) => {
       mutateCurrentUser();
       mutateFetchedUser();
       toast.success('Success');
-    } catch (error) {
+    } 
+    catch (error) 
+    {
       setLoading(false);
       toast.error('Something went wrong');
     }

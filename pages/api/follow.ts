@@ -23,16 +23,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     });
 
-    if (!user) {
+    if (!user || !currentUser) {
       throw new Error('Invalid ID');
     }
 
-    let updatedFollowingIds = [...(user.followingIds || [])];
+    let updatedFollowingIds = [...currentUser.currentUser.followingIds];
 
     if (req.method === 'POST') {
       updatedFollowingIds.push(userId);
 
-      // NOTIFICATION PART START
       try {
         await prisma.notification.create({
           data: {
@@ -52,7 +51,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       } catch (error) {
         console.log(error);
       }
-      // NOTIFICATION PART END
       
     }
 

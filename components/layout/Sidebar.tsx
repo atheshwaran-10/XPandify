@@ -2,7 +2,7 @@
 import { signOut } from 'next-auth/react';
 import { BiLogOut } from 'react-icons/bi';
 import { BsHouseFill, BsBellFill } from 'react-icons/bs';
-import { FaUser,FaSearch,FaUsers } from 'react-icons/fa';
+import { FaUser,FaSearch,FaUsers,FaFacebookMessenger } from 'react-icons/fa';
 import useCurrentUser from '@/hooks/useCurrentUser';
 
 import SidebarItem from './SidebarItem';
@@ -15,35 +15,40 @@ const Sidebar = () => {
   const items = [
     {
       icon: BsHouseFill,
-      label: 'Home',
-      href: '/',
+      label: "Home",
+      href: "/",
     },
     {
       icon: FaSearch,
-      label: 'Search',
-      href: '/search',
+      label: "Search",
+      href: "/search",
     },
     {
       icon: FaUsers,
-      label: 'Communities',
+      label: "Communities",
       href: `/communities`,
       auth: true,
     },
     {
-      icon: BsBellFill,
-      label: 'Notifications',
-      href: '/notifications',
+      icon: FaFacebookMessenger,
+      label: "Messenger",
+      href: `/conversations`,
       auth: true,
-      alert: currentUser?.hasNotification
+    },
+    {
+      icon: BsBellFill,
+      label: "Notifications",
+      href: "/notifications",
+      auth: true,
+      alert: currentUser?.hasNotification,
     },
     {
       icon: FaUser,
-      label: 'Profile',
+      label: "Profile",
       href: `/users/${currentUser?.id}`,
       auth: true,
     },
-
-  ]
+  ];
 
   return (
     <div className="md:flex col-span-1 h-full pt-3 md:pt-1 ">

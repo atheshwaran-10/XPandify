@@ -83,11 +83,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ url }) => {
             }}
           />
           <div className="flex flex-row gap-3">
-            <button className="playButton">
-              <IconContext.Provider value={{ size: "3em", color: "#0EA5E9" }}>
-                <BiSkipPrevious />
-              </IconContext.Provider>
-            </button>
+
             {!isPlaying ? (
               <button className="playButton" onClick={playingButton}>
                 <IconContext.Provider value={{ size: "3em", color: "#0EA5E9" }}>
@@ -101,11 +97,7 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({ url }) => {
                 </IconContext.Provider>
               </button>
             )}
-            <button className="playButton">
-              <IconContext.Provider value={{ size: "3em", color: "#0EA5E9" }}>
-                <BiSkipNext />
-              </IconContext.Provider>
-            </button>
+           
           </div>
         </div>
       </div>

@@ -12,34 +12,53 @@ interface CommunityBadgeProps{
   communtiy:Community
 }
 
+
+
 const CommunityBadge:React.FC<CommunityBadgeProps> = ({communtiy}) => {
   const router=useRouter();
   const { data: currentUser } = useCurrentUser();
+
+
   const { isFollowing, toggleFollow ,loading } = useCommunityFollow(currentUser?.id,communtiy.id);
+
+ const handleFollow = () => {
+   if (!currentUser.emailVerified) router.push("/verify");
+   else toggleFollow();
+ };
+  
   return (
-      <div key={communtiy.id} className="flex flex-row gap-4 rounded-lg ">
-        <Avatar communityId={communtiy.id} isCommunity={true} communityImage={communtiy.profileImage!}/>
-        <div className="flex flex-col hover:cursor-pointer" onClick={()=>router.push(`communities/${communtiy.id}`)}>
-          <p className="font-semibold text-sm">{communtiy.name}</p>
-          <p className="text-neutral-400 text-sm">People Count:{communtiy.userIds.length}</p>
+    <div key={communtiy.id} className="flex flex-row gap-4 rounded-lg ">
+      <Avatar
+        communityId={communtiy.id}
+        isCommunity={true}
+        communityImage={communtiy.profileImage!}
+      />
+      <div
+        className="flex flex-col hover:cursor-pointer"
+        onClick={() => router.push(`communities/${communtiy.id}`)}
+      >
+        <p className="font-semibold text-sm">{communtiy.name}</p>
+        <p className="text-neutral-400 text-sm">
+          People Count:{communtiy.userIds.length}
+        </p>
+      </div>
+      {currentUser?.id === communtiy.id ? (
+        <></>
+      ) : (
+        <div className="ml-auto">
+          <Button
+            disabled={loading}
+            onClick={handleFollow}
+            value={isFollowing ? "Unfollow" : "Follow"}
+            variant={isFollowing ? "destructive" : "default"}
+            className={loading ? " hover:cursor-wait" : "hover:cursor-pointer"}
+          >
+            {isFollowing ? <>Leave</> : <>Join</>}
+          </Button>
         </div>
-        {currentUser?.id === communtiy.id ? (
-          <></>
-          ) : (
-            <div className='ml-auto'>
-              <Button
-                disabled={loading}
-                onClick={toggleFollow} 
-                value={isFollowing ? 'Unfollow' : 'Follow'}
-                variant={isFollowing ? "destructive" : "default"}
-                className={loading? " hover:cursor-wait" : "hover:cursor-pointer"}
-              >
-              {isFollowing ? <>Leave</> : <>Join</>}
-            </Button>
-            </div>
-          )}
+      )}
     </div>
-  )
+  );
 }
         
 

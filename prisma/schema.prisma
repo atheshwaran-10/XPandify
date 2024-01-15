@@ -25,12 +25,21 @@ model User {
   updatedAt       DateTime  @updatedAt
   followingIds    String[]  @db.ObjectId
   hasNotification Boolean?
+  otp             String?
 
   posts         Post[]
   comments      Comment[]
   notifications Notification[]
   Community     Community[]    @relation(fields: [communityIds], references: [id])
   communityIds  String[]       @db.ObjectId
+
+  conversationIds String[]       @db.ObjectId
+  conversations   Conversation[] @relation(fields: [conversationIds], references: [id])
+
+  seenMessageIds String[]  @db.ObjectId
+  seenMessages   Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
+
+  messages Message[]
 }
 
 model Post {
@@ -43,7 +52,7 @@ model Post {
   image     String?
   video     String?
   audio     String?
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   comments     Comment[]
   Community    Community[] @relation(fields: [communityIds], references: [id])
@@ -70,7 +79,7 @@ model Notification {
   body      String
   userId    String   @db.ObjectId
   createdAt DateTime @default(now())
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Community {
@@ -85,4 +94,34 @@ model Community {
   createdAt    DateTime @default(now())
   users        User[]   @relation(fields: [userIds], references: [id])
   posts        Post[]   @relation(fields: [postIds], references: [id])
+}
+
+model Conversation {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime @default(now())
+  lastMessageAt DateTime @default(now())
+  name          String?
+  isGroup       Boolean?
+
+  messagesIds String[]  @db.ObjectId
+  messages    Message[]
+
+  userIds String[] @db.ObjectId
+  users   User[]   @relation(fields: [userIds], references: [id])
+}
+
+model Message {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  body      String?
+  image     String?
+  createdAt DateTime @default(now())
+
+  seenIds String[] @db.ObjectId
+  seen    User[]   @relation("Seen", fields: [seenIds], references: [id])
+
+  conversationId String       @db.ObjectId
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  senderId String @db.ObjectId
+  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
 }

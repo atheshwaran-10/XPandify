@@ -13,6 +13,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@headlessui/react": "^1.7.18",
     "@hookform/resolvers": "^3.3.2",
     "@mui/icons-material": "^5.15.3",
     "@mui/material": "^5.15.3",
@@ -43,8 +44,11 @@
     "next": "^13.5.6",
     "next-auth": "^4.23.2",
     "next-themes": "^0.2.1",
+    "nodemailer": "^6.9.8",
     "primereact": "^10.1.1",
     "prisma": "^5.6.0",
+    "pusher": "^5.2.0",
+    "pusher-js": "^8.4.0-rc2",
     "quill-blot-formatter": "^1.0.5",
     "quill-image-resize-module-react": "^3.0.0",
     "radix-ui": "^1.0.1",
@@ -72,7 +76,9 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/nodemailer": "^6.4.14",
     "autoprefixer": "^10.4.13",
+    "encoding": "^0.1.13",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.7"
   }

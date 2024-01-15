@@ -70,18 +70,22 @@ const LoginModal = () => {
 
   const footerContent = (
     <div className="text-neutral-400 text-center mt-4">
-      <p>First time using Twitter?
-        <span 
-          onClick={onToggle} 
+      <p>
+        First time using Xpandify?
+        <span
+          onClick={onToggle}
           className="
               
             cursor-pointer 
             hover:underline
           "
-          > Create an account</span>
+        >
+          {" "}
+          Create an account
+        </span>
       </p>
     </div>
-  )
+  );
 
   return (
     <Modal
