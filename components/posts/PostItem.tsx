@@ -137,6 +137,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
                 transition 
                 hover:text-sky-500
             "
+            onClick={()=>router.push(`/posts/${data.id}`)}
             >
               <AiOutlineMessage size={20} />
               <p>{data.comments?.length || 0}</p>
